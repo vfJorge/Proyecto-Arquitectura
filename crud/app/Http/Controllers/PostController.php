@@ -69,7 +69,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $posts = DB::select('select * from posts where id=?',[$id]);
+        return view('edit', ['posts' => $posts]);
     }
 
     /**
@@ -81,7 +82,18 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $nombre = $request->get('nombre');
+        $email = $request->get('email');
+        $direccion = $request->get('direccion');
+        $telefono = $request->get('telefono');
+        $sueldo = $request->get('sueldo');
+        $posts = DB::update('update posts set nombre=?, email=?, direccion=?, telefono=?, sueldo=? where id=?', [$nombre, $email, $direccion, $telefono, $sueldo, $id]);
+        if($posts){
+            $red = redirect('posts')->with('success', 'Se han actualizado los datos.');
+        }else{
+            $red = redirect('posts/edit/'.$id)->with('danger', 'Error al actualizar los datos.');
+        }
+        return $red;
     }
 
     /**
@@ -92,6 +104,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $posts = DB::delete('delete from posts where id=?', [$id]);
+        $red = redirect('posts');
+        return $red;
     }
 }
