@@ -14,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = DB::select('select * from posts');
+        $posts = DB::table('posts')->paginate(4);
         return view('index', ['posts' => $posts]);
     }
 
@@ -26,6 +26,12 @@ class PostController extends Controller
     public function create()
     {
         return view('create');
+    }
+
+    public function search(Request $request){
+        $search = $request->get('buscar');
+        $posts = DB::table('posts')->where('nombre', 'like', '%'.$search.'%')->orwhere('email', 'like', '%'.$search.'%')->orwhere('direccion', 'like', '%'.$search.'%')->orwhere('telefono', 'like', '%'.$search.'%')->orwhere('sueldo', 'like', '%'.$search.'%')->paginate(5);
+        return view('index',['posts' => $posts]);
     }
 
     /**
