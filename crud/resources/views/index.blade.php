@@ -11,7 +11,7 @@
     <div class="col-md-6">
         <h1>PROYECTO CRUD (LARAVEL 8)</h1>
     </div>
-    <div class="col-md-4">
+    <div class="col-md">
         <form action="{{ action('\App\Http\Controllers\PostController@search') }}" method="get">
             <div class="input-group">
             <input type="search" name="buscar" class="form-control">
@@ -21,15 +21,16 @@
             </div>
         </form>
     </div>
-    <div class="col-md-6 text-right">
-        <a href="{{ action('\App\Http\Controllers\PostController@create') }}" class="btn btn-primary">Agregar</a>
-    </div>
 </div>
-
+<form method="post">
+<a href="{{ action('\App\Http\Controllers\PostController@create') }}" class="btn btn-primary float-end">Agregar</a>
+    @csrf
+    @method('DELETE')
+    <button formaction="{{ action('\App\Http\Controllers\PostController@deleteAll') }}" type="submit" class="btn btn-danger mb-3">Eliminar los seleccionados</button>
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>No</th>
+            <th></th>
             <th>Nombre</th>
             <th>Correo</th>
             <th>Dirección</th>
@@ -40,25 +41,23 @@
     <tbody>
         @foreach($posts as $post)
         <tr>
-            <td>{{ $post->id }}</td>
+            <td><input type="checkbox" name="ids[]" class="selectbox" value="{{ $post->id }}"></td>
             <td>{{ $post->nombre }}</td>
             <td>{{ $post->email }}</td>
             <td>{{ $post->direccion }}</td>
             <td>{{ $post->telefono }}</td>
             <td>{{ $post->sueldo }}</td>
             <td>
-                <form action="{{ action('\App\Http\Controllers\PostController@destroy', $post->id) }}" method="post">
+                <form method="post">
                     <a href="{{ action('\App\Http\Controllers\PostController@edit', $post->id) }}" class="btn btn-warning">Editar</a>
-
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button formaction="{{ action('\App\Http\Controllers\PostController@destroy', $post->id) }}" type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>
         @endforeach
     </tbody>
 </table>
+</form>
 {{ $posts->links('pagination::bootstrap-4') }}
 
 @endsection

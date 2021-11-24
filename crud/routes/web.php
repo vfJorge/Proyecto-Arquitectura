@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 Route::get('/', [PostController::class, 'index']);
 Route::get('/search', [PostController::class, 'search']);
+Route::delete('/deleteall', [PostController::class, 'deleteAll']);
 Route::resource('posts', '\App\Http\Controllers\PostController');

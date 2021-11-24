@@ -42,6 +42,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required',
+            'email' => 'required',
+            'direccion' => 'required',
+            'telefono' => 'required',
+            'sueldo' => 'required'
+        ]);
         $nombre = $request->get('nombre');
         $email = $request->get('email');
         $direccion = $request->get('direccion');
@@ -88,6 +95,13 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required',
+            'email' => 'required',
+            'direccion' => 'required',
+            'telefono' => 'required',
+            'sueldo' => 'required'
+        ]);
         $nombre = $request->get('nombre');
         $email = $request->get('email');
         $direccion = $request->get('direccion');
@@ -113,5 +127,11 @@ class PostController extends Controller
         $posts = DB::delete('delete from posts where id=?', [$id]);
         $red = redirect('posts');
         return $red;
+    }
+
+    public function deleteAll(Request $request){
+        $ids = $request->get('ids');
+        $dbs = DB::delete('delete from posts where id in ('.implode(",",$ids).')');
+        return redirect('posts');
     }
 }
